@@ -208,12 +208,30 @@ class NotificationHelper {
 
 }
 
+// Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
+//   debugPrint("onBackground: ${message.notification!.title}/${message.notification!.body}/${message.notification!.titleLocKey}");
+//   // var androidInitialize = new AndroidInitializationSettings('notification_icon');
+//   // var iOSInitialize = new IOSInitializationSettings();
+//   // var initializationsSettings = new InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+//   // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+//   // flutterLocalNotificationsPlugin.initialize(initializationsSettings);
+//   // NotificationHelper.showNotification(message, flutterLocalNotificationsPlugin, true);
+// }
+
 Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
   debugPrint("onBackground: ${message.notification!.title}/${message.notification!.body}/${message.notification!.titleLocKey}");
-  // var androidInitialize = new AndroidInitializationSettings('notification_icon');
-  // var iOSInitialize = new IOSInitializationSettings();
-  // var initializationsSettings = new InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
-  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  // flutterLocalNotificationsPlugin.initialize(initializationsSettings);
-  // NotificationHelper.showNotification(message, flutterLocalNotificationsPlugin, true);
+  debugPrint("onBackground payload: ${message.data}");
+
+  NotificationBody notificationBody = NotificationHelper.convertNotification(message.data);
+
+  if (notificationBody.notificationType == NotificationType.order) {
+    Get.offAllNamed(RouteHelper.getOrderDetailsRoute(int.parse(message.data['order_id']), fromNotification: true));
+  } else if (notificationBody.notificationType == NotificationType.general) {
+    Get.offAllNamed(RouteHelper.getNotificationRoute(fromNotification: true));
+  } else {
+    Get.offAllNamed(RouteHelper.getChatRoute(notificationBody: notificationBody, conversationId: notificationBody.conversationId, fromNotification: true));
+  }
 }
+
+
+

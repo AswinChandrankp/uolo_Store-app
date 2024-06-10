@@ -1,4 +1,5 @@
 import 'package:sixam_mart_store/data/api/api_client.dart';
+import 'package:sixam_mart_store/data/model/response/notification_model.dart';
 import 'package:sixam_mart_store/util/app_constants.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,5 +20,7 @@ class NotificationRepo {
   int? getSeenNotificationCount() {
     return sharedPreferences.getInt(AppConstants.notificationCount);
   }
+
+  void saveNotificationList(List<NotificationModel> list) {}
 
 }
